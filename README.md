@@ -48,7 +48,7 @@ instructions](https://click.palletsprojects.com/en/8.1.x/shell-completion/#enabl
 
 This section is meant for developers and provides instruction on how to work with the repository.
 
-### Dev Environment Setup
+### Generic Setup
 
 This project requires [Lefthook](https://github.com/evilmartians/lefthook) and
 [Commitlint](https://github.com/conventional-changelog/commitlint).
@@ -62,6 +62,42 @@ Install lefthook:
     lefthook install
 
 Also install [direnv](https://direnv.net/) to benefit from some dev tools.
+
+### Ubuntu 22.04 Dev Environment Setup
+
+The following commands provide a dev environment on a clean (WSL) Ubuntu 22.04 install. Official repos mostly contains packages that are too old.
+
+#### Install system dependencies
+
+```bash
+# Install Node
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && sudo apt install -y nodejs
+
+# Install tools
+curl -fsSL https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-linux-x86_64.gz | gzip -d - | install -m 755 /dev/stdin ~/.local/bin/taplo
+sudo snap install lefthook --classic
+sudo npm install -g @commitlint/cli @commitlint/config-conventional
+
+# Install Python 3.11
+sudo add-apt-repository ppa:deadsnakes/ppa && sudo apt install -y python3.11-full
+# Install pip
+python3.11 -m ensurepip
+# (if needed, add pip into PATH)
+echo "export PATH=\$PATH:$HOME/.local/bin" >> ~/.bashrc
+# Upgrade pip and install pipx
+python3.11 -m pip install --upgrade pip pipx
+# Install tools
+pipx install poetry playwright pipenv
+# Install playwright and its system dependencies
+sudo playwright install
+```
+
+#### Install project dependencies in the virtual env
+
+```bash
+pipenv shell
+poetry install
+```
 
 ### Testing
 
